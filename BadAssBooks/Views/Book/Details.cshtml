@@ -1,0 +1,105 @@
+﻿@model BadAssBooks.ViewModels.BookIndexData
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="col-md-8">
+    <!--container for Book-->
+    <div class="container" style="border-bottom:solid thin">
+        <div class="col-md-4">
+            <img src="@Url.Content(Model.Books.Single().ThumbnailURL)" style="height:188px; width:150px"/>
+        </div>
+        <div class="col-md-8">
+            <h3>@Html.DisplayFor(modelItem => Model.Books.Single().Title)</h3>
+            <h5>
+                by
+                @foreach (var item in Model.Authors)
+                {
+                    <text>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                        @Html.DisplayFor(modelItem => item.FirstName),
+                    </text>
+                }
+            </h5>
+            <h5>                
+                @for (var i = 0; i < (int)ViewBag.totalRatings; i++)
+                {
+                    <span class="glyphicon glyphicon-star"></span>
+                }
+                @for (var i = (int)ViewBag.totalRatings; i < 5; i++)
+                {
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                }
+                @ViewBag.totalRatings
+            </h5>
+            <p>
+                @Html.DisplayFor(modelItem => Model.Books.Single().LongDescription)
+            </p>
+        </div>
+    </div>
+    <!--container for Reviews-->
+    <div class="container">
+        @foreach (var c in Model.Comments)
+        {
+            <div class="container" style="border-bottom:solid thin">
+                <div class="col-md-2">
+                    <img src="@Url.Content(c.User.ImageThumbnail)" style="height:100px; width:70px;" />
+                </div>
+                <div class="col-md-10">
+                    <text>
+                        <h5>
+                            @Html.DisplayFor(modelItem => c.User.LastName)
+                            @Html.DisplayFor(modelItem => c.User.FirstName)
+                            @foreach (var r in Model.Ratings)
+                            {
+                                if (r.UserID == c.User.UserID)
+                                {
+                                    <text>
+                                        rated it &nbsp;
+                                        @for (var i = 0; i < (int)r.GivenRating; i++)
+                                        {
+                                            <span class="glyphicon glyphicon-star"></span>
+                                        }
+                                        @for (var i = (int)r.GivenRating; i < 5; i++)
+                                        {
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                        }
+                                    </text>
+                                }
+                            }
+                        </h5>
+                        <hr />
+                        @Html.DisplayFor(modelItem => c.CommentText)
+                    </text>
+                </div>
+            </div>        
+        }
+    </div>
+</div>
+<div class="col-md-4">
+    @if (Model.MyBooks.Count() > 0 )
+    {
+        <h4>People who have added it to MyBooks </h4>
+        foreach (var m in Model.MyBooks)
+        {
+        <p>
+            @Html.DisplayFor(modelItem => m.User.LastName)
+            @Html.DisplayFor(modelItem => m.User.FirstName)
+        </p>
+        }
+    }
+    @if (Model.Users.Count() > 0)
+    {
+        <h4>People who have recommended it</h4>
+        foreach (var u in Model.Users)
+        {
+            <p>
+                @Html.DisplayFor(modelItem => u.LastName)
+                @Html.DisplayFor(modelItem => u.FirstName)
+            </p>
+        }
+    }
+
+</div>
+

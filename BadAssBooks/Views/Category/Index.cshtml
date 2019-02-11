@@ -1,0 +1,28 @@
+﻿@model PagedList.IPagedList<BadAssBooks.Models.Category>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Category";
+}
+
+@foreach (var item in Model)
+{
+    <div class="container">
+        <div class="col-md-2">
+            <img src="@Url.Content(item.Book.ThumbnailURL)" alt="Image" style="height:188px; width:150px"/>
+        </div>
+        <div class="col-md-10">
+            @Html.ActionLink(item.Book.Title, "Details", new { id = item.BookID })
+            <p>@item.Book.ShortDescription</p>
+        </div>
+    </div>
+    <hr />
+}
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+
